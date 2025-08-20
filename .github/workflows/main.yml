@@ -1,0 +1,31 @@
+# Nome da nossa automação
+name: Gerador de Landing Page
+
+# Quando a automação será ativada
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'protocol/command.json'
+  workflow_dispatch:
+
+# O trabalho que será executado
+jobs:
+  gerar_landing_page:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do Repositorio
+        uses: actions/checkout@v2
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+          
+      - name: Executar o Script de Geracao
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          npm install @google/generative-ai
+          node gemini-brain.js
